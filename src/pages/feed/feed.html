@@ -14,42 +14,56 @@
 
 
 <ion-content padding>
-  <ion-card>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+  <!--Angular directive, to repetive the HTML structure  -->
+<ion-card *ngFor="let movieVar of movie_list">
 
   <ion-item>
     <ion-avatar item-start>
       <img src="assets/imgs/avatar.png">
     </ion-avatar>
-    <h2 class="feed_title"> {{username}} </h2>
-    <p class="feed_date">November 5, 1955</p>
+    <h2 class="feed_title"> {{movieVar.original_title}} </h2>
+    <p class="feed_date">{{movieVar.release_date}}</p>
   </ion-item>
 
-  <img src="assets/imgs/feedImage.png">
+<!--https://image.tmdb.org/t/p/w500/  -->
+  <img [src]="'https://image.tmdb.org/t/p/w300/' + movieVar.backdrop_path">
 
   <ion-card-content>
-    <p>Criando uma nova pagina para o app feito em Ionic.</p>
+    <p>{{movieVar.overview}}</p>
   </ion-card-content>
 
   <ion-row>
     <ion-col>
       <button ion-button icon-left clear small>
         <ion-icon name="thumbs-up"></ion-icon>
-        <div>12 Likes</div>
+        <div>{{feed_object.numOfLikes}} Likes</div>
       </button>
     </ion-col>
     <ion-col>
       <button ion-button icon-left clear small>
         <ion-icon name="text"></ion-icon>
-        <div>4 Comments</div>
+        <div>{{feed_object.numOfComments}} Comments</div>
       </button>
     </ion-col>
     <ion-col center text-center>
       <ion-note>
-        11h ago
+        {{feed_object.timeSinceComment}}
       </ion-note>
     </ion-col>
   </ion-row>
 
+  <button ion-button block (click)="goToMoreDetailsPage(movieVar)">More Details</button>
+
 </ion-card>
+
+<!-- block to load infinite list of movies -->
+<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+  <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>
 
 </ion-content>
